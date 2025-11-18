@@ -11,6 +11,8 @@
 standard libraries are usually referred to with the abbreviation ***std***... which just so happens to have second meaning that is synonymous with ***sti***.<br>
 if you want to keep it PG, you can refer to this library as the ***standard tools implementation*** or something idk, be creative!
 
+***sti*** attempts to add everything that is missing from the C standard library such as dynamic arrays, hashmaps, string manipulation and file / directory management.
+
 ***sti*** is single header, cross platform and built with c99, so you shouldn't have any troubles including in your project.
 
 ## including in your project
@@ -64,3 +66,11 @@ equal = streqic(word, "hello world!");
 ```
 
 ### file
+
+## roadmap
+
+- [x] arrays
+- [ ] strings
+- [ ] file utilities
+- [ ] directory utilities
+- [ ] hashmaps
