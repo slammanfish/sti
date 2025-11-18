@@ -8,10 +8,10 @@
 
 ## what is sti?
 
-standard libraries are usually referred to with the abbreviation ***std***... which just so happens to have second meaning that is synonymouse with ***sti***.<br>
+standard libraries are usually referred to with the abbreviation ***std***... which just so happens to have second meaning that is synonymous with ***sti***.<br>
 if you want to keep it PG, you can refer to this library as the ***standard tools implementation*** or something idk, be creative!
 
-***sti*** is cross platform and built with c99
+***sti*** is single header, cross platform and built with c99, so you shouldn't have any troubles including in your project.
 
 ## including in your project
 
@@ -23,7 +23,7 @@ in one .c file, add the following line above the *#include*
 
 ## components
 
-### array
+### [array](tests/array.c)
 sti implements an [stb-like](https://github.com/nothings/stb) array.
 
 ```c
@@ -42,6 +42,8 @@ arrdel(array, 0);
 arrsetcap(array, 10);
 // sets the length of the array, resizes if necessary
 arrsetlen(array, 10);
+// frees the array
+arrfree(array);
 ```
 
 ### string
