@@ -49,20 +49,24 @@ arrfree(array);
 ```
 
 ### string
-string builds off of the array component to create flexible string types similar to something you would find in java.
+string builds off of the array component to create flexible string types similar to something you would find in java.<br>
+strings are just char * internally, so you can use them with the standard C string functions.
 
 ```c
-// works with any pointer. MUST be initialised to NULL
-string word = "Hello World";
+string word = strnew("hello");
 
-// values can be gotten just like any other array
+// get length using standard C strlen
+int length = strlen(word);
+// get length using arrlen
+// arrlen includes the null terminator
+int length = arrlen(word) - 1;
+
+// characters can be gotten just like any other array
 char character = word[2];
 // appends a character to the array
 word = strapp(word, '!');
-// checks if two strings are equal
-bool equal = streq(word, "hello world!");
 // checks if two strings are equal, ignoring case
-equal = streqic(word, "hello world!");
+bool equal = strcmpic(word, "");
 ```
 
 ### file

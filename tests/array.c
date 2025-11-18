@@ -1,5 +1,4 @@
 #define STI_IMPL
-#define STI_ARRAY
 #include "../sti.h"
 
 int main() {
