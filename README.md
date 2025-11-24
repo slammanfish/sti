@@ -30,7 +30,7 @@ sti implements an [stb-like](https://github.com/nothings/stb) array.
 
 ```c
 // works with any pointer. MUST be initialised to NULL
-int *array = NULL;
+array(int) array = NULL;
 
 // values can be gotten just like any other array
 int value = array[2];
@@ -53,27 +53,29 @@ string builds off of the array component to create flexible string types similar
 strings are just char * internally, so you can use them with the standard C string functions.
 
 ```c
-string word = strnew("hello");
+string str = string("hello");
 
 // get length using standard C strlen
-int length = strlen(word);
+int length = strlen(str);
 // get length using arrlen
 // arrlen includes the null terminator
-int length = arrlen(word) - 1;
+int length = arrlen(str) - 1;
 
 // characters can be gotten just like any other array
-char character = word[2];
+char character = str[2];
+// join two strings together
+str = strjoin(str, string(" world"));
 // appends a character to the array
-word = strapp(word, '!');
+str = strapp(str, '!');
 // checks if two strings are equal, ignoring case
-bool equal = strcmpic(word, "");
+bool equal = strcmpic(str, "");
 ```
 
 ### file
 
 ## roadmap
 
-- [x] arrays
+- [ ] arrays
 - [ ] strings
 - [ ] file utilities
 - [ ] directory utilities

@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 //--------------
 // array
@@ -10,6 +11,8 @@
 
 #define STI_ARRAY_INIT_CAP (2)
 #define STI_ARRAY_GROW_MULTIPLIER (2)
+
+#define array(T) T *
 
 typedef struct sti_array_header {
 	size_t len;
@@ -88,14 +91,24 @@ void _sti_arr_free(void *arr) {
 #include <string.h>
 #include <ctype.h>
 
+// strings need to be freed.
 typedef char *string;
 
 // creates a string
-string strnew(const char *str);
+#define string(str) (_sti_string_new((str)))
+
+// frees a string
+void strfree(string str);
 // appends a character to the end of a string
+// frees str
 string strapp(string str, char c);
+// joins two strings together
+// frees a and b
+string strjoin(string a, string b);
 // compares two strings, ignoring case
 bool strcmpic(string a, string b);
+
+string _sti_string_new(const char *str);
 
 //--------------
 // impl
@@ -103,7 +116,7 @@ bool strcmpic(string a, string b);
 
 #ifdef STI_IMPL
 
-string strnew(const char *str) {
+string _sti_string_new(const char *str) {
 	string out = NULL;
 	size_t len = strlen(str);
 	arrsetlen(out, len + 1);
@@ -112,6 +125,10 @@ string strnew(const char *str) {
 	}
 	out[len] = '\0';
 	return out;
+}
+
+void strfree(string str) {
+	arrfree(str);
 }
 
 string strapp(string str, char c) {
@@ -123,7 +140,25 @@ string strapp(string str, char c) {
 	}
 	out[len] = c;
 	out[len + 1] = '\0';
-	arrfree(str);
+	strfree(str);
+	return out;
+}
+
+string strjoin(string a, string b) {
+	string out = NULL;
+	size_t alen = strlen(a);
+	size_t blen = strlen(b);
+	size_t len = alen + blen;
+	arrsetlen(out, len + 1);
+	for (int i = 0; i < alen; i++) {
+		out[i] = a[i];
+	}
+	for (int i = 0; i < blen; i++) {
+		out[alen + i] = b[i];
+	}
+	out[len] = '\0';
+	strfree(a);
+	strfree(b);
 	return out;
 }
 
@@ -166,7 +201,7 @@ string fname(const char *file);
 #ifdef STI_IMPL
 
 bool fexists(const char *file) {
-	filt_t *fp = fopen(file, "r");
+	file_t *fp = fopen(file, "r");
 	bool out = fp != NULL;
 	fclose(fp);
 	return out;
@@ -186,7 +221,7 @@ string freadall(file_t *file) {
 	char *buf = malloc(sizeof(char) * (len + 1));
 	size_t n = fread(buf, sizeof(char), len, file);
 	buf[n] = '\0';
-	string out = strnew(buf);
+	string out = string(buf);
 	free(buf);
 	return out;
 }

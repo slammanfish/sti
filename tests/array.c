@@ -2,7 +2,7 @@
 #include "../sti.h"
 
 int main() {
-	int *arr = NULL;
+	array(int) arr = NULL;
 
 	arrsetcap(arr, 9);
 
