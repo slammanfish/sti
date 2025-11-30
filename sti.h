@@ -21,32 +21,40 @@ typedef struct sti_array_header {
 
 #define _sti_arr_header(a) ((sti_array_header_t *) (a) - 1)
 
-// gets the length of the array
+// gets the length of the array.
 #define arrlen(a) \
 		((a) ? _sti_arr_header((a))->len : 0)
-// gets the capacity of the array
+// gets the capacity of the array.
 #define arrcap(a) \
 		((a) ? _sti_arr_header((a))->cap : 0)
-// puts a value on the end of the array
-// resizes if necessary
+// puts a value on the end of the array.
+// resizes if necessary.
 #define arrput(a, v) \
 		((arrlen((a)) == arrcap((a)) ? \
 			(a) = _sti_arr_grow((a), sizeof(*(a)), (a) ? \
 			arrcap((a)) * STI_ARRAY_GROW_MULTIPLIER : STI_ARRAY_INIT_CAP) : 0), \
 		(a)[_sti_arr_header((a))->len++] = (v))
-// removes the value at index i
-// swaps a[i] with a[len - 1]
-#define arrrem(a, i)
-// deletes the value at index i
-// shifts the rest of the array over
-#define arrdel(a, i)
-// frees the array
+// removes the value at index i.
+// swaps a[i] with a[len - 1].
+// use this if the order of the array is irrelevent,
+// otherwise prefer arrdel
+// O(1).
+#define arrrem(a, i) \
+		((a)[i] = (a)[--_sti_arr_header((a))->len])
+// deletes the value at index i.
+// shifts the rest of the array over.
+// use this if the order of the array is important,
+// otherwise prefer arrrem
+// O(n^2).
+#define arrdel(a, i) \
+		
+// frees the array.
 #define arrfree(a) \
 		(_sti_arr_free((a)))
-// sets the capacity of the array
+// sets the capacity of the array.
 #define arrsetcap(a, v) \
 		((a) = _sti_arr_grow((a), sizeof(*(a)), v))
-// sets the length of the array
+// sets the length of the array.
 #define arrsetlen(a, v) \
 		((a) = _sti_arr_grow((a), sizeof(*(a)), v), _sti_arr_header((a))->len = (v))
 
@@ -85,6 +93,22 @@ void _sti_arr_free(void *arr) {
 #endif
 
 //--------------
+// hashmap
+//--------------
+
+#define hashmap(K, V) struct { K key; V value; } *
+
+//--------------
+// impl
+//--------------
+
+#ifdef STI_IMPL
+
+
+
+#endif
+
+//--------------
 // string
 //--------------
 
@@ -94,18 +118,22 @@ void _sti_arr_free(void *arr) {
 // strings need to be freed.
 typedef char *string;
 
-// creates a string
+// creates a string.
 #define string(str) (_sti_string_new((str)))
+// gets the length of a string.
+// faster than strlen.
+// O(1).
+#define strlenq(str) (arrlen((str)) - 2)
 
-// frees a string
+// frees a string.
 void strfree(string str);
-// appends a character to the end of a string
-// frees str
+// appends a character to the end of a string.
+// frees str.
 string strapp(string str, char c);
-// joins two strings together
+// joins two strings together.
 // frees a and b
 string strjoin(string a, string b);
-// compares two strings, ignoring case
+// compares two strings, ignoring case.
 bool strcmpic(string a, string b);
 
 string _sti_string_new(const char *str);
@@ -119,15 +147,17 @@ string _sti_string_new(const char *str);
 string _sti_string_new(const char *str) {
 	string out = NULL;
 	size_t len = strlen(str);
-	arrsetlen(out, len + 1);
+	arrsetlen(out, len + 2);
 	for (int i = 0; i < len; i++) {
 		out[i] = str[i];
 	}
 	out[len] = '\0';
+	out[len + 1] = '\s';
 	return out;
 }
 
 void strfree(string str) {
+	printf("freed string \"%s\"\n", str);
 	arrfree(str);
 }
 
@@ -157,8 +187,13 @@ string strjoin(string a, string b) {
 		out[alen + i] = b[i];
 	}
 	out[len] = '\0';
-	strfree(a);
-	strfree(b);
+	// this is really hacky and might be error prone
+	if ((a + alen + 1) != NULL && a[alen + 1] == '\s') {
+		strfree(a);
+	}
+	if ((b + blen + 1) != NULL && b[blen + 1] == '\s') {
+		strfree(b);
+	}
 	return out;
 }
 

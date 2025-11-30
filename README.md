@@ -57,14 +57,16 @@ string str = string("hello");
 
 // get length using standard C strlen
 int length = strlen(str);
-// get length using arrlen
-// arrlen includes the null terminator
-int length = arrlen(str) - 1;
+// get length using strlenq
+// more efficient than strlen O(1)
+int length = strlenq(str);
 
 // characters can be gotten just like any other array
 char character = str[2];
 // join two strings together
 str = strjoin(str, string(" world"));
+// even works with standard c strings
+str = strjoin(str, " world");
 // appends a character to the array
 str = strapp(str, '!');
 // checks if two strings are equal, ignoring case

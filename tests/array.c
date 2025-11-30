@@ -23,6 +23,18 @@ int main() {
 		printf("- %d\n", arr[i]);
 	}
 
+	arrrem(arr, 8);
+	arrrem(arr, 7);
+	arrrem(arr, 6);
+	arrrem(arr, 5);
+
+	printf("---------\n");
+	printf("len: %d, cap: %d\n", arrlen(arr), arrcap(arr));
+
+	for (int i = 0; i < arrlen(arr); i++) {
+		printf("- %d\n", arr[i]);
+	}
+
 	arrsetlen(arr, 0);
 
 	printf("---------\n");
