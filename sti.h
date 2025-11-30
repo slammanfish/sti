@@ -134,7 +134,8 @@ string strapp(string str, char c);
 // frees a and b
 string strjoin(string a, string b);
 // compares two strings, ignoring case.
-bool strcmpic(string a, string b);
+// returns 0 on success (i know its dumb but this is to maintain consitency with strcmp)
+int strcmpc(string a, string b);
 
 string _sti_string_new(const char *str);
 bool _sti_string_valid(string str);
@@ -172,12 +173,13 @@ void strfree(string str) {
 string strapp(string str, char c) {
 	string out = NULL;
 	size_t len = strlen(str);
-	arrsetlen(out, len + 2);
+	arrsetlen(out, len + 3);
 	for (int i = 0; i < len; i++) {
 		out[i] = str[i];
 	}
 	out[len] = c;
 	out[len + 1] = '\0';
+	out[len + 2] = '\s';
 	strfree(str);
 	return out;
 }
@@ -187,7 +189,7 @@ string strjoin(string a, string b) {
 	size_t alen = strlen(a);
 	size_t blen = strlen(b);
 	size_t len = alen + blen;
-	arrsetlen(out, len + 1);
+	arrsetlen(out, len + 2);
 	for (int i = 0; i < alen; i++) {
 		out[i] = a[i];
 	}
@@ -195,21 +197,22 @@ string strjoin(string a, string b) {
 		out[alen + i] = b[i];
 	}
 	out[len] = '\0';
+	out[len + 1] = '\s';
 	strfree(a);
 	strfree(b);
 	return out;
 }
 
-bool strcmpic(string a, string b) {
+int strcmpc(string a, string b) {
 	if (arrlen(a) != arrlen(b)) {
-		return false;
+		return 1;
 	}
 	for (int i = 0; i < arrlen(a) - 1; i++) {
 		if (tolower(a[i]) != tolower(b[i])) {
-			return false;
+			return 1;
 		}
 	}
-	return true;
+	return 0;
 }
 
 #endif

@@ -13,7 +13,7 @@ if you want to keep it PG, you can refer to this library as the ***standard tool
 
 ***sti*** attempts to add everything that is missing from the C standard library such as dynamic arrays, hashmaps, string manipulation and file / directory management.
 
-***sti*** is single header, cross platform and built with c99, so you shouldn't have any troubles including in your project.
+***sti*** is single header, cross platform and built with C99, so you shouldn't have any troubles including in your project.
 
 ## including in your project
 
@@ -70,7 +70,8 @@ str = strjoin(str, " world");
 // appends a character to the array
 str = strapp(str, '!');
 // checks if two strings are equal, ignoring case
-bool equal = strcmpic(str, "");
+// returns 0 on success (dumb, but consistent with strcmp)
+int equal = strcmpc(str, "");
 ```
 
 ### file
