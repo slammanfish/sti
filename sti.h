@@ -137,6 +137,7 @@ string strjoin(string a, string b);
 bool strcmpic(string a, string b);
 
 string _sti_string_new(const char *str);
+bool _sti_string_valid(string str);
 
 //--------------
 // impl
@@ -156,9 +157,16 @@ string _sti_string_new(const char *str) {
 	return out;
 }
 
+bool _sti_string_valid(string str) {
+	size_t len = strlen(str);
+	return str + len + 1 != NULL && str[len + 1] == '\s';
+}
+
 void strfree(string str) {
-	printf("freed string \"%s\"\n", str);
-	arrfree(str);
+	// this is really hacky and might be error prone
+	if (_sti_string_valid(str)) {
+		arrfree(str);
+	}
 }
 
 string strapp(string str, char c) {
@@ -187,13 +195,8 @@ string strjoin(string a, string b) {
 		out[alen + i] = b[i];
 	}
 	out[len] = '\0';
-	// this is really hacky and might be error prone
-	if ((a + alen + 1) != NULL && a[alen + 1] == '\s') {
-		strfree(a);
-	}
-	if ((b + blen + 1) != NULL && b[blen + 1] == '\s') {
-		strfree(b);
-	}
+	strfree(a);
+	strfree(b);
 	return out;
 }
 

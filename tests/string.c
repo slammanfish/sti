@@ -6,7 +6,7 @@ int main() {
 
 	printf("%s, %d, %d\n", str, strlen(str), arrlen(str));
 
-	str = strjoin(str, string(" world"));
+	str = strjoin(str, " world");
 
 	printf("%s, %d, %d\n", str, strlen(str), arrlen(str));
 
